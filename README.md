@@ -5,7 +5,7 @@ Tally Software Clone
 Follow the steps below to set up and run the project on your local machine.
 
 1. Clone the Repository
-git clone <repository-url>
+git clone https://github.com/Shashidhar020/Tally-Software-Clone.git
 
 2. Open the Project in VS Code
 
@@ -19,7 +19,7 @@ Choose the folder named tally_software.
 
 In the integrated terminal, run the following commands:
 
-cd tally_software
+cd Tally-Software-Clone
 npm install
 
 4. Run the Development Server
