@@ -11,7 +11,7 @@ import Alter from './pages/Alter';
 import StockItemForm from './components/stock_item/StockItemForm';
 import StockItemList from './components/stock_item/StockItemList';
 import Gstcalci from './components/sales/Gstcalci';
-import Stock_group from './components/stock_group/stock_group';
+import Stock_group from './components/stock_group/Stock_group';
 import StockGroupList from './components/stock_group/StockGroupList';
 import Groups from './components/groups/groups';
 import GroupList from './components/groups/groupList';
