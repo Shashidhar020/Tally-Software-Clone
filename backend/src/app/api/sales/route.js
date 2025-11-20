@@ -2,20 +2,33 @@ import clientPromise from "@/lib/mongodb";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS,PUT",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
+
+// Preflight for browser
 export async function OPTIONS() {
-  return new Response(null, { status: 204, headers: corsHeaders });
+  return new Response(null, {
+    status: 200,     // MUST be 200 for Vercel
+    headers: corsHeaders,
+  });
 }
+
 export async function GET() {
   try {
     const client = await clientPromise;
     const db = client.db("tally_db");
     const sales = await db.collection("sales").find().toArray();
-    return Response.json(sales, { headers: corsHeaders });
+
+    return new Response(JSON.stringify(sales), {
+      status: 200,
+      headers: corsHeaders,
+    });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { headers: corsHeaders });
+    return new Response(JSON.stringify({ success: false, error: error.message }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 }
 
@@ -25,12 +38,19 @@ export async function POST(req) {
     const db = client.db("tally_db");
     const data = await req.json();
     const result = await db.collection("sales").insertOne(data);
-    return Response.json({ success: true, insertedId: result.insertedId }, { headers: corsHeaders });
+
+    return new Response(JSON.stringify({ success: true, insertedId: result.insertedId }), {
+      status: 200,
+      headers: corsHeaders,
+    });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { headers: corsHeaders });
+    return new Response(JSON.stringify({ success: false, error: error.message }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 }
-// 🗑 DELETE sale by account
+
 export async function DELETE(req) {
   try {
     const client = await clientPromise;
@@ -38,13 +58,19 @@ export async function DELETE(req) {
     const { account } = await req.json();
 
     const result = await db.collection("sales").deleteOne({ account });
-    if (result.deletedCount === 1) {
-      return Response.json({ success: true, message: "Sale deleted successfully" }, { headers: corsHeaders });
-    } else {
-      return Response.json({ success: false, message: "No sale found for this account" }, { headers: corsHeaders });
-    }
+
+    return new Response(JSON.stringify({
+      success: result.deletedCount === 1,
+      message: result.deletedCount === 1 ? "Sale deleted successfully" : "No sale found for this account",
+    }), {
+      status: 200,
+      headers: corsHeaders,
+    });
   } catch (error) {
-    return Response.json({ success: false, error: error.message }, { headers: corsHeaders });
+    return new Response(JSON.stringify({ success: false, error: error.message }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 }
 
@@ -53,26 +79,24 @@ export async function PUT(req) {
     const client = await clientPromise;
     const db = client.db("tally_db");
     const { account, updateData } = await req.json();
+
     const result = await db.collection("sales").updateOne(
-      { account: account },    
-      { $set: updateData }    
+      { account },
+      { $set: updateData }
     );
-    if (result.matchedCount === 0) {
-      return Response.json(
-        { success: false, message: "No sale found with that account" },
-        { headers: corsHeaders }
-      );
-    }
-    return Response.json(
-      { success: true, message: "Sale updated successfully", modifiedCount: result.modifiedCount },
-      { headers: corsHeaders }
-    );
+
+    return new Response(JSON.stringify({
+      success: result.matchedCount > 0,
+      message: result.matchedCount === 0 ? "No sale found with that account" : "Sale updated successfully",
+      modifiedCount: result.modifiedCount,
+    }), {
+      status: 200,
+      headers: corsHeaders,
+    });
   } catch (error) {
-    return Response.json(
-      { success: false, error: error.message },
-      { headers: corsHeaders }
-    );
+    return new Response(JSON.stringify({ success: false, error: error.message }), {
+      status: 500,
+      headers: corsHeaders,
+    });
   }
 }
-
-

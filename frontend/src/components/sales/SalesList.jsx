@@ -16,7 +16,7 @@ const SalesList = () => {
   useEffect(() => {
   const fetchSales = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/sales");
+      const res = await fetch("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales");
       if (!res.ok) throw new Error("Failed to fetch sales data");
       const data = await res.json();
       // Sort by date (ascending)
@@ -38,7 +38,7 @@ const SalesList = () => {
   const confirmDelete = window.confirm(`Delete sale "${name}" permanently?`);
   if (!confirmDelete) return;
   try {
-    const res = await axios.delete("http://localhost:3000/api/sales", {
+    const res = await axios.delete("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales", {
       data: { account: name }, // body for DELETE request
       headers: { "Content-Type": "application/json" },
     });

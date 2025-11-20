@@ -57,7 +57,7 @@ useEffect(() => {
       const allStockItems = JSON.parse(localStorage.getItem("StockItems") || "[]");
       const allLedgerList = JSON.parse(localStorage.getItem("ledgerList") || "[]");
 
-      const res = await fetch("http://localhost:3000/api/sales");
+      const res = await fetch("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales");
 
       if (!res.ok) {
         throw new Error("Failed to fetch sales data");
@@ -90,7 +90,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchSales = async()=>{
     try{
-        const res = await fetch("http://localhost:3000/api/sales");
+        const res = await fetch("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales");
       if (!res.ok) throw new Error("Failed to fetch sales data");
   const storedData = await res.json();
     if (storedData) {

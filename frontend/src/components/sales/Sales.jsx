@@ -27,7 +27,9 @@ function Sales() {
 useEffect(() => {
   const fetchsalesData = async()=>{
  try {
-    const salesData = await axios.get("http://localhost:3000/api/sales")
+    const salesData = await axios.get(
+       "https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales"
+    )
     
     const allSalesdata =await salesData.data
     
@@ -89,7 +91,7 @@ useEffect(()=>{
 
   try {
     // 🧩 Fetch all sales to check duplicates
-    const { data: allSales } = await axios.get("http://localhost:3000/api/sales");
+    const { data: allSales } = await axios.get("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales");
     const isExisting = allSales.find((s) => s.account === account);
 
     // --- Handle Edit Mode ---
@@ -99,7 +101,7 @@ useEffect(()=>{
         return;
       }
 
-      const res = await axios.put("http://localhost:3000/api/sales", {
+      const res = await axios.put("https://tally-software-backend-pff6-lypsz6px1.vercel.app/api/sales", {
         account: ledgerNameParam, // which sale to update
         updateData: newSale,      // what fields to change
       });
@@ -121,7 +123,7 @@ useEffect(()=>{
       }
 
       // 💾 Insert new sale (POST)
-      const res = await axios.post("http://localhost:3000/api/sales", newSale);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/sales`, newSale);
       if (res.data.success) {
         alert("Sale saved successfully!");
         console.log("Inserted ID:", res.data.insertedId);

@@ -727,9 +727,9 @@ color: white;
  font-size: 30px;
 }
 .ds2-boxes{
-  display: grid;
- grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
-  grid-template-rows: repeat(auto-fit,minmax(150px,1fr));
+  display: flex;
+ flex-wrap: wrap;
+  
   gap:15px;
 
 }
